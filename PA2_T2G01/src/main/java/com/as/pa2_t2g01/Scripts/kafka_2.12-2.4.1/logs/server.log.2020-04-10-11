@@ -1,0 +1,5 @@
+[2020-04-10 12:00:00,974] INFO [ThrottledChannelReaper-Request]: Stopped (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2020-04-10 12:00:00,974] INFO [ThrottledChannelReaper-Request]: Shutdown completed (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2020-04-10 12:00:00,978] INFO [SocketServer brokerId=2] Shutting down socket server (kafka.network.SocketServer)
+[2020-04-10 12:00:01,055] INFO [SocketServer brokerId=2] Shutdown completed (kafka.network.SocketServer)
+[2020-04-10 12:00:01,060] INFO [KafkaServer id=2] shut down completed (kafka.server.KafkaServer)

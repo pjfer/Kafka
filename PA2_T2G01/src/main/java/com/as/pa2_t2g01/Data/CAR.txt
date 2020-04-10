@@ -1,0 +1,9 @@
+| car_reg | timestamp | 00 |
+| car_reg | timestamp | 00 |
+| car_reg | timestamp | 00 |
+| car_reg | timestamp | 00 |
+| car_reg | timestamp | 00 |
+| car_reg | timestamp | 00 |
+| car_reg | timestamp | 00 |
+| car_reg | timestamp | 00 |
+| car_reg | timestamp | 00 |
