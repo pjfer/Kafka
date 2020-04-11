@@ -28,7 +28,7 @@ then
     while read line
     do
         plates+=($line)
-    done < "plates.txt"
+    done < "../Data/PLATES.txt"
 
     generate_messages
     sort -n -t '|' -k 3 "../Data/CAR.txt" -o "../Data/CAR.txt"

@@ -9,7 +9,7 @@ then
     do
         idx=$(($(($RANDOM%$diff))+1))
         idx2=$(($(($RANDOM%$diff))+1))
-        echo $(($RANDOM%10))$(($RANDOM%10))-$(echo $alphabet | awk '{print substr($0,'$idx',1)}')$(echo $alphabet | awk '{print substr($0,'$idx2',1)}')-$(($RANDOM%10))$(($RANDOM%10)) >> "plates.txt"
+        echo $(($RANDOM%10))$(($RANDOM%10))-$(echo $alphabet | awk '{print substr($0,'$idx',1)}')$(echo $alphabet | awk '{print substr($0,'$idx2',1)}')-$(($RANDOM%10))$(($RANDOM%10)) >> "../Data/PLATES.txt"
     done
 elif [ $# -eq 2 ]
 then
