@@ -1,0 +1,47 @@
+#!/bin/bash
+
+generate_messages() {
+    for n in $(seq 1 $num_heartbeat_msgs)
+    do
+        echo "|" ${plates[$(($RANDOM%${#plates[@]}))]} "|" $(($(($RANDOM%$diff))+1)) "| 00 |" >> "../Data/CAR.txt"
+    done
+
+    for n in $(seq 1 $num_speed_msgs)
+    do
+        echo "|" ${plates[$(($RANDOM%${#plates[@]}))]} "|" $(($(($RANDOM%$diff))+1)) "| 01 |" $(($RANDOM%301)) "|" >> "../Data/CAR.txt"
+    done
+
+    for n in $(seq 1 $num_status_msgs)
+    do
+        echo "|" ${plates[$(($RANDOM%${#plates[@]}))]} "|" $(($(($RANDOM%$diff))+1)) "| 02 |" $([ $(($RANDOM%2)) == 0 ] && echo "OK" || echo "KO" ) "|" >> "../Data/CAR.txt"
+    done
+}
+
+diff=$((100000-1+1))
+num_speed_msgs=1500
+num_status_msgs=1500
+num_heartbeat_msgs=3000
+declare -a plates
+
+if [ $# -eq 0 ]
+then
+    while read line
+    do
+        plates+=($line)
+    done < "plates.txt"
+
+    generate_messages
+    sort -n -t '|' -k 3 "../Data/CAR.txt" -o "../Data/CAR.txt"
+elif [ $# -eq 1 ]
+then
+    while read line
+    do
+        plates+=($line)
+    done < $1
+
+    generate_messages
+    sort -n -t '|' -k 3 "../Data/CAR.txt" -o "../Data/CAR.txt"
+else
+    echo "Command usage: ./messages_gen optional:<filename to read the plates from>"
+fi
+

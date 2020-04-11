@@ -1,0 +1,22 @@
+#!/bin/bash
+
+diff=$((26-1+1))
+alphabet=$(echo {A..Z} | tr -d ' ')
+
+if [ $# -eq 1 ]
+then
+    for i in $(seq 1 $1)
+    do
+        idx=$(($(($RANDOM%$diff))+1))
+        idx2=$(($(($RANDOM%$diff))+1))
+        echo $(($RANDOM%10))$(($RANDOM%10))-$(echo $alphabet | awk '{print substr($0,'$idx',1)}')$(echo $alphabet | awk '{print substr($0,'$idx2',1)}')-$(($RANDOM%10))$(($RANDOM%10)) >> "plates.txt"
+    done
+elif [ $# -eq 2 ]
+then
+    for i in $(seq 1 $1)
+    do
+        echo $(($RANDOM%10))$(($RANDOM%10))-$(echo $alphabet | awk '{print substr($0,'$idx',1)}')$(echo $alphabet | awk '{print substr($0,'$idx2',1)}')-$(($RANDOM%10))$(($RANDOM%10)) >> $2
+    done
+else
+    echo "Command usage: ./plates_gen <number of plates to create> optional:<filename to write to>"
+fi

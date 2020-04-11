@@ -1,0 +1,45 @@
+#!/bin/sh
+
+if [ $# -eq 1 ]
+then
+    while getopts scd option
+    do
+        case "${option}"
+        in
+        s) kafka_2.12-2.4.1/bin/zookeeper-server-start.sh kafka_2.12-2.4.1/config/zookeeper.properties >logs/zookeeper.out 2>&1 &
+           sleep 5
+           echo "Zookeeper started!"
+           kafka_2.12-2.4.1/bin/kafka-server-start.sh kafka_2.12-2.4.1/config/server.properties >logs/broker0.out 2>&1 &
+           sleep 2
+           echo "Kafka node started!"
+           kafka_2.12-2.4.1/bin/kafka-server-start.sh kafka_2.12-2.4.1/config/server-1.properties >logs/broker1.out 2>&1 &
+           sleep 2
+           echo "Kafka node started!"
+           kafka_2.12-2.4.1/bin/kafka-server-start.sh kafka_2.12-2.4.1/config/server-2.properties >logs/broker2.out 2>&1 &
+           sleep 2
+           echo "Kafka node started!"
+           ;;
+        c) kafka_2.12-2.4.1/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 1 --topic BatchTopic >logs/batchTopic.out 2>&1
+           sleep 2
+           echo "Kafka batch topic created!"
+           kafka_2.12-2.4.1/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 1 --topic ReportTopic >logs/reportTopic.out 2>&1
+           sleep 2
+           echo "Kafka report topic created!"
+           kafka_2.12-2.4.1/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 1 --topic AlarmTopic >logs/alarmTopic.out 2>&1
+           sleep 2
+           echo "Kafka alarm topic created!"
+           ;;
+        d) kafka_2.12-2.4.1/bin/kafka-server-stop.sh >logs/brokers-terminate.out 2>&1
+           sleep 30
+           echo "Kafka nodes terminated!"
+           kafka_2.12-2.4.1/bin/zookeeper-server-stop.sh >logs/zookeeper-terminate.out 2>&1
+           sleep 2
+           echo "Zookeeper terminated!"
+           ;;
+        *) echo "Command usage: ./kafka  -s to initialize\n\t\t\t -c to create the topics\n\t\t\t -d to disconnect"
+           ;;
+        esac
+    done
+else
+    echo "Command usage: ./kafka  -s to initialize\n\t\t\t -c to create the topics\n\t\t\t -d to disconnect"
+fi
