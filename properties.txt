@@ -1,0 +1,77 @@
+HeartBeat
+	Produtor
+		Fire & Forget --- acks = 0
+	Consumidor
+		commit no final
+
+Speed
+	Produtor
+		Fire & forget --- acks = 0
+				  max.in.flight.request = 1 (com callback)
+	Consumidor
+		commits, manuais, syncronos
+		enable.auto.commit = false
+		syncronous commits.
+Status
+	Produtor
+		Sync --- ack = 1
+		     --- retry = 10
+	Consumidor
+		commit no final
+
+Tópicos
+	Criar Várias Partições (3 x 3).
+	Replicar por fator de 2.
+	Têm de estar insync.
+	Não pode ser reordenado.
+	Não pode ser reinserido.
+	auto.create.topics.enable = false
+-----------------------------------------------------------------------------------------------------
+Brokers
+	Um server.properties por broker
+	broker.id, 
+	listeners, 
+	log.dirs
+	zookeeper.connect,
+	listeners,
+	auto.create.topics.enable = false,
+	min.insync.replicas = maioria
+	offsets.commit.timeout.ms -> pode ter de ser alterado
+	transaction.state.log.min.isr = maioria
+	transaction.state.log.replication.factor = nº replicas
+	unclean.leader.election.enable = false
+
+Topics
+	min.insync.replicas = maioria
+	unclean.leader.election.enable = false
+
+Producer
+	acks = 0 ou -1
+	bootstrap.servers = host1:port1
+	retries = 0 -> fazemos o retry manualmente
+	enable.idempotence = true (para evitar duplicados)
+		acks = -1
+		retries > 0
+		max.inflight.requests.per.connection = 1
+	value.deserializar...
+
+Consumer
+	value.deserializer
+	bootstrap.server = ...
+	allow.auto.create.topics = false
+	enable.auto.commit = false
+	max.poll.records = 50,
+
+
+
+
+
+
+
+
+
+		
+
+
+
+	
