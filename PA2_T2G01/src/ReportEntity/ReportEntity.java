@@ -29,7 +29,7 @@ public class ReportEntity {
         props.put("enable.auto.commit", enable_commit);
         props.put("max.poll.records", max_records);
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer", "main.java.com.as.pa2_t2g01.Data.MessageDeserializer");
+        props.put("value.deserializer", "Data.MessageDeserializer");
         props.put("group.id", "0");
         
         ReportGUI gui = new ReportGUI();
