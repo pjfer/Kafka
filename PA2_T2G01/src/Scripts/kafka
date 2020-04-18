@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 kafka_dir="kafka_2.12-2.4.1/"
 
@@ -22,35 +22,35 @@ then
         in
         s) kafka_2.12-2.4.1/bin/zookeeper-server-start.sh kafka_2.12-2.4.1/config/zookeeper.properties >logs/zookeeper.out 2>&1 &
            sleep 5
-           echo "Zookeeper started!"
+           printf "Zookeeper started!\n"
            for (( i=1; i<=$number_of_brokers; i++ )) 
-	   do
-	        eval $broker_command$broker_config"server"$i".properties >logs/broker"$i".out 2>&1 &"
-		sleep 5
-           	echo "Broker "$i" started!"
-	   done
+      	   do
+              eval $broker_command$broker_config"server"$i".properties" >logs/broker"$i".out 2>&1 &
+      		    sleep 5
+              printf "Broker "$i" started!\n"
+      	   done
            ;;
         c) kafka_2.12-2.4.1/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 3 --topic BatchTopic --config min.insync.replicas=2 --config unclean.leader.election.enable=false >logs/batchTopic.out 2>&1
            sleep 2
-           echo "Kafka batch topic created!"
+           printf "Kafka batch topic created!\n"
            kafka_2.12-2.4.1/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 3 --topic ReportTopic --config min.insync.replicas=2 --config unclean.leader.election.enable=false >logs/reportTopic.out 2>&1
            sleep 2
-           echo "Kafka report topic created!"
+           printf "Kafka report topic created!\n"
            kafka_2.12-2.4.1/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 3 --topic AlarmTopic  --config min.insync.replicas=2 --config unclean.leader.election.enable=false >logs/alarmTopic.out 2>&1
            sleep 2
-           echo "Kafka alarm topic created!"
+           printf "Kafka alarm topic created!\n"
            ;;
         d) kafka_2.12-2.4.1/bin/kafka-server-stop.sh >logs/brokers-terminate.out 2>&1
            sleep 30
-           echo "Kafka nodes terminated!"
+           printf "Kafka nodes terminated!\n"
            kafka_2.12-2.4.1/bin/zookeeper-server-stop.sh >logs/zookeeper-terminate.out 2>&1
            sleep 2
-           echo "Zookeeper terminated!"
+           printf "Zookeeper terminated!\n"
            ;;
-        *) echo "Command usage: ./kafka  -s to initialize\n\t\t\t -c to create the topics\n\t\t\t -d to disconnect"
+        *) printf "Command usage: ./kafka   -s to initialize\n\t\t\t -c to create the topics\n\t\t\t -d to disconnect\n"
            ;;
         esac
     done
 else
-    echo "Command usage: ./kafka  -s to initialize\n\t\t\t -c to create the topics\n\t\t\t -d to disconnect"
+    printf "Command usage: ./kafka   -s to initialize\n\t\t\t -c to create the topics\n\t\t\t -d to disconnect\n"
 fi

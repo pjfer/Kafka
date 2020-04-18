@@ -18,7 +18,7 @@ public class CollectEntityGUI extends javax.swing.JFrame {
      * @param text sent message in the string format.
      */
     public void updateTextArea(String text) {
-        jTextArea1.append(text);
+        jTextArea1.append(text + "\n");
         jTextArea1.setCaretPosition(jTextArea1.getText().length());
     }
 
@@ -50,6 +50,7 @@ public class CollectEntityGUI extends javax.swing.JFrame {
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
+        jTextArea1.setFocusable(false);
         jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -84,8 +85,10 @@ public class CollectEntityGUI extends javax.swing.JFrame {
     /**
      * Instantiation and initialization of all elements present in the collect
      * entity GUI.
+     * 
+     * @param gui graphical user interface of the collect entity.
      */
-    public void start() {
+    public void start(CollectEntityGUI gui) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -111,7 +114,7 @@ public class CollectEntityGUI extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new CollectEntityGUI().setVisible(true);
+            gui.setVisible(true);
         });
     }
 

@@ -2,7 +2,6 @@ package CollectEntity;
 
 import Data.Message;
 import CollectEntity.GUI.CollectEntityGUI;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -11,50 +10,50 @@ import java.util.stream.Collectors;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 /**
- *
- * 
+ * Class responsible for reading the messages from the CAR.txt file and send 
+ * them, through kafka, to all the created topics (Batch, Report, Alarm).
  */
 public class CollectEntity {
     /**
-     * 
+     * List of host/port pairs to use for establishing the initial connection 
+     * to the Kafka cluster.
      */
     private static final String BROKERS_ADDRESSES = "localhost:9092";
     
     /**
-     * 
+     * The batch topic name to where the messages should be sent to.
      */
     private static final String BATCH_TOPIC = "BatchTopic";
     
     /**
-     * 
+     * The report topic name to where the messages should be sent to.
      */
     private static final String REPORT_TOPIC = "ReportTopic";
     
     /**
-     * 
+     * The alarm topic name to where the messages should be sent to.
      */
     private static final String ALARM_TOPIC = "AlarmTopic";
     
     /**
-     * 
+     * Serializer class for key.
      */
     private static final String KEY_SERIALIZER = 
             "org.apache.kafka.common.serialization.StringSerializer";
     
     /**
-     * 
+     * Serializer class for value.
      */
     private static final String VALUE_SERIALIZER = "Data.MessageSerializer";
     
     /**
-     * 
+     * Filename localization to read the messages from.
      */
     private static final String CARS_FILENAME = 
             System.getProperty("user.dir").concat("/src/Data/CAR.txt");
@@ -72,9 +71,8 @@ public class CollectEntity {
         heartbeatProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, 
                 VALUE_SERIALIZER);
         heartbeatProps.put(ProducerConfig.ACKS_CONFIG, "0");
-        heartbeatProps.put(ProducerConfig.BATCH_SIZE_CONFIG, 5242880);
         heartbeatProps.put(ProducerConfig.LINGER_MS_CONFIG, 5);
-        heartbeatProps.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, 10485760);
+        heartbeatProps.put(ProducerConfig.BATCH_SIZE_CONFIG, 102400);
         
         Properties speedProps = new Properties();
         speedProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, 
@@ -105,7 +103,7 @@ public class CollectEntity {
                 new KafkaProducer<>(statusProps);
         
         CollectEntityGUI gui = new CollectEntityGUI();
-        gui.start();
+        gui.start(gui);
         
         try (Stream<String> stream = Files.lines(Paths.get(CARS_FILENAME))) {
             messages = stream.collect(Collectors.toList());

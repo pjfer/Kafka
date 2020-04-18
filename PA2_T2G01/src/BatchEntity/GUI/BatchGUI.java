@@ -67,7 +67,7 @@ public class BatchGUI extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Report Entity GUI");
+        jLabel3.setText("Batch Entity GUI");
 
         jLabel4.setText("Messages Received: ");
 

@@ -15,33 +15,38 @@ generate_messages() {
     do
         echo "|" ${plates[$(($RANDOM%${#plates[@]}))]} "|" $(($(($RANDOM%$diff))+1)) "| 02 |" $([ $(($RANDOM%2)) == 0 ] && echo "OK" || echo "KO" ) "|" >> "../Data/CAR.txt"
     done
+
+    sort -n -t '|' -k 3 "../Data/CAR.txt" -o "../Data/CAR.txt"
 }
 
 diff=$((100000-1+1))
-num_speed_msgs=1500
-num_status_msgs=1500
-num_heartbeat_msgs=3000
 declare -a plates
 
-if [ $# -eq 0 ]
+if [ $# -eq 3 ]
 then
+    num_speed_msgs=$1
+    num_status_msgs=$2
+    num_heartbeat_msgs=$3
+
     while read line
     do
         plates+=($line)
     done < "../Data/PLATES.txt"
 
     generate_messages
-    sort -n -t '|' -k 3 "../Data/CAR.txt" -o "../Data/CAR.txt"
-elif [ $# -eq 1 ]
+elif [ $# -eq 4 ]
 then
+    num_speed_msgs=$1
+    num_status_msgs=$2
+    num_heartbeat_msgs=$3
+
     while read line
     do
         plates+=($line)
-    done < $1
+    done < $4
 
     generate_messages
-    sort -n -t '|' -k 3 "../Data/CAR.txt" -o "../Data/CAR.txt"
 else
-    echo "Command usage: ./messages_gen optional:<filename to read the plates from>"
+    echo "Command usage: ./messages_gen <number of speed messages to generate> <number of status messages to generate> <number of heartbeat messages to generate> optional:<filename to read the plates from>"
 fi
 
