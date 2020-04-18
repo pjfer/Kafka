@@ -40,8 +40,11 @@ public class BatchEntity {
         
         for(int i = 0; i < n_consumers; i++){
             KafkaConsumer<String, Message> consumer = new KafkaConsumer<>(props);
-            consumer.subscribe(Arrays.asList(batch_topic));
-            Consumer c = new Consumer(consumer, sr);
+            RebalanceListener rl = new RebalanceListener(consumer);
+            
+            consumer.subscribe(Arrays.asList(batch_topic), rl);
+            
+            Consumer c = new Consumer(consumer, sr, rl);
             c.start();
         }
         

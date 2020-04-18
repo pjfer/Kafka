@@ -1,23 +1,24 @@
 package ReportEntity;
 
 import java.time.Duration;
-import java.util.Collections;
 import Data.Message;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.consumer.OffsetAndMetadata;
-import org.apache.kafka.common.TopicPartition;
 
 
 public class Consumer extends Thread{
     
     private final KafkaConsumer<String, Message> consumer;
     private final SharedRegion sr;
+    private final RebalanceListener rl;
     
-    public Consumer(KafkaConsumer<String, Message> consumer, SharedRegion sr){
+    public Consumer(KafkaConsumer<String, Message> consumer, SharedRegion sr,
+            RebalanceListener rl){
+        
         this.consumer = consumer;
         this.sr = sr;
+        this.rl = rl;
     }
     
     @Override
@@ -29,17 +30,15 @@ public class Consumer extends Thread{
                     Message m = record.value();
 
                     if(m.getMessageType()== 1){
-                        consumer.commitSync(
-                                Collections.singletonMap(
-                                        new TopicPartition(record.topic(), record.partition()),
-                                        new OffsetAndMetadata(record.offset() + 1)));
+                        rl.addOffset(record.topic(), record.partition(), record.offset());
                     }
 
                     sr.writeFile(m.toString());
                     sr.writeScreen(m.toString());
                 }
 
-                consumer.commitSync();
+                consumer.commitSync(rl.getOffsets());
+                rl.clearOffsets();
         }
     }
 }

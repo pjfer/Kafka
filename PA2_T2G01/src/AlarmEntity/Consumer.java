@@ -14,10 +14,14 @@ public class Consumer extends Thread{
     
     private final KafkaConsumer<String, Message> consumer;
     private final SharedRegion sr;
+    private final RebalanceListener rl;
     
-    public Consumer(KafkaConsumer<String, Message> consumer, SharedRegion sr){
+    public Consumer(KafkaConsumer<String, Message> consumer, SharedRegion sr, 
+            RebalanceListener rl){
+        
         this.consumer = consumer;
         this.sr = sr;
+        this.rl = rl;
     }
     
     @Override
@@ -31,11 +35,6 @@ public class Consumer extends Thread{
                 Message m = record.value();
                 
                 if(m.getMessageType()== 1){
-                    consumer.commitSync(
-                            Collections.singletonMap(
-                                    new TopicPartition(record.topic(), 
-                                            record.partition()),
-                                    new OffsetAndMetadata(record.offset()+1)));
                     if(!alarm && m.getSpeed() > 120){
                         alarm = true;
                         sr.writeFile(m.toString() + " | ON |");
@@ -46,10 +45,12 @@ public class Consumer extends Thread{
                         sr.updateAlarm(alarm, m.toString() + " | OFF |");
                         sr.writeFile(m.toString() + " | OFF |");
                     }
+                    rl.addOffset(record.topic(), record.partition(), record.offset());
                 }
                 sr.writeScreen(m.toString());
             }
-            consumer.commitSync();
+            consumer.commitSync(rl.getOffsets());
+            rl.clearOffsets();
         }
     }
 }
