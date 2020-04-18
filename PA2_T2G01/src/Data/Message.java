@@ -64,14 +64,14 @@ public class Message {
     @Override
     public String toString() {
         if(messageType == 0){
-            return  "| " + carReg + " | " + timestamp + " | 00 |\n HeartBeat"; 
+            return  "| " + carReg + " | " + timestamp + " | 00 | HeartBeat"; 
         }
         if(messageType == 1){
-            return  "| " + carReg + " | " + timestamp + " | 01 |\n" + speed;
+            return  "| " + carReg + " | " + timestamp + " | 01 |" + speed;
         }
         if(messageType == 2){
             String status = (carStatus == 0) ? "OK" : "KO";
-            return  "| " + carReg + " | " + timestamp + " | 02 |\n" + status;
+            return  "| " + carReg + " | " + timestamp + " | 02 |" + status;
         }
         
         return "Message{" + "message_type=" + messageType + ", car_reg=" + carReg + ", timestamp=" + timestamp + ", speed=" + speed + ", car_status=" + carStatus + '}';
