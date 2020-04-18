@@ -1,11 +1,7 @@
-# Pratical Assignment I
+# Pratical Assignment II
 
-The project is about an harvest in an agricultural farm.
-
-There are two main entities: the Control Center (CC) and the Farm Infrastructure (FI). The CC is responsible for supervising the harvest. The FI is the
-infrastructure for the agricultural harvest.
-
-The CC and the FI are implemented as two different processes and the communication between them is through sockets.
+The project is about a centralized control platform where it's necessary to supervise the status of cars.
+Periodically, each car sends information, which is stored in a remote file to be processed by the centralized platform.
 
 ## Getting Started
 
@@ -21,13 +17,18 @@ It is advised to install the [Apache Netbeans IDE](https://netbeans.apache.org/d
 
 ## Deployment
 
-After opening our project (PA1_P2G01) in the IDE, firstly run the CCMain.java program inside the ControlCenter folder, and then run the FIMain.java program inside the FarmInfrastructure folder.
+Inside of the folder PA2_P2G01/src/Scripts, there's 3 scripts responsible for the data construction and kafka deployment.
 
-From then on, the Control Center GUI is interactive and it is the only tool needed to play with the project, whereas the Farm Infrastructure GUI is only for demonstration purposes. 
+- plates_gen: Generates a file, inside the Data folder, with random car plate numbers. The number of generated plate number is inserted by the user.
+- messages_gen: Generates a file, inside the Data folder, with messages of type status, speed and heartbeat. The number of generated messages of each type is inserted by the user.
+- kafka: Deploys zookeeper and kafka, and creates the necessary topics.
+
+After opening our project (PA2_P2G01) in the IDE, firstly, the AlarmEntity.java, BatchEntity.java and ReportEntity.java should be run, and afterwards, the CollectEntity.java.
 
 ## Built With
 
 * Java
+* Shell
 
 ## Authors
 
