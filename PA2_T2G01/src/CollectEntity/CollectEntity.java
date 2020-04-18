@@ -59,10 +59,19 @@ public class CollectEntity {
             System.getProperty("user.dir").concat("/src/Data/CAR.txt");
     
     public static void main(String[] args) {
+        // Message read from the text file.
         Message msg;
+        
+        // Components of the message after being split.
         String[] msgArgs;
+        
+        // List of all the messages in the text file.
         List<String> messages = new ArrayList<>();
         
+        /*
+        Set of properties to ensure the constraints 
+        for the heartbeat type messages.
+        */
         Properties heartbeatProps = new Properties();
         heartbeatProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, 
                 BROKERS_ADDRESSES);
@@ -70,10 +79,26 @@ public class CollectEntity {
                 KEY_SERIALIZER);
         heartbeatProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, 
                 VALUE_SERIALIZER);
+        
+        // Producer will not wait for any acknowledgment from the server at all.
         heartbeatProps.put(ProducerConfig.ACKS_CONFIG, "0");
+        
+        /*
+        Reduce the number of requests sent, adding up to 5ms of latency to 
+        records sent in the absence of load.
+        */
         heartbeatProps.put(ProducerConfig.LINGER_MS_CONFIG, 5);
+        
+        /*
+        Producer will attempt to batch records together into fewer requests,
+        whenever multiple records are being sent to the same partition.
+        */
         heartbeatProps.put(ProducerConfig.BATCH_SIZE_CONFIG, 102400);
         
+        /*
+        Set of properties to ensure the constraints 
+        for the speed type messages.
+        */
         Properties speedProps = new Properties();
         speedProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, 
                 BROKERS_ADDRESSES);
@@ -81,10 +106,31 @@ public class CollectEntity {
                 KEY_SERIALIZER);
         speedProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, 
                 VALUE_SERIALIZER);
+        
+        /*
+        Leader will wait for the full set of in-sync replicas to acknowledge 
+        the record. This guarantees that the record will not be lost as 
+        long as at least one in-sync replica remains alive.
+        */
         speedProps.put(ProducerConfig.ACKS_CONFIG, "all");
+        
+        /*
+        Maximum number of unacknowledged requests the client will send.
+        Settings set to 1, so there isn't the risk of message reordering due to
+        retries.
+        */
         speedProps.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 1);
+        
+        /*
+        Producer will ensure that exactly one copy of each message is written 
+        in the stream.
+        */
         speedProps.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         
+        /*
+        Set of properties to ensure the constraints 
+        for the status type messages.
+        */
         Properties statusProps = new Properties();
         statusProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, 
                 BROKERS_ADDRESSES);
@@ -92,7 +138,19 @@ public class CollectEntity {
                 KEY_SERIALIZER);
         statusProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, 
                 VALUE_SERIALIZER);
+        
+        /*
+        Leader will wait for the full set of in-sync replicas to acknowledge 
+        the record. This guarantees that the record will not be lost as 
+        long as at least one in-sync replica remains alive.
+        */
         statusProps.put(ProducerConfig.ACKS_CONFIG, "all");
+        
+        /*
+        Maximum number of unacknowledged requests the client will send.
+        Settings set to 1, so there isn't the risk of message reordering due to
+        retries.
+        */
         statusProps.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION,1);
         
         Producer<String, Message> heartbeatProducer = 
@@ -105,6 +163,7 @@ public class CollectEntity {
         CollectEntityGUI gui = new CollectEntityGUI();
         gui.start(gui);
         
+        // Try to open the file and save all the messages inside it into a list.
         try (Stream<String> stream = Files.lines(Paths.get(CARS_FILENAME))) {
             messages = stream.collect(Collectors.toList());
         }
@@ -114,6 +173,7 @@ public class CollectEntity {
         }
         
         for (String message : messages) {
+            // Remove all the whitespaces and splits into message components.
             msgArgs = message.replaceAll("\\s", "").split("\\|");
             msg = new Message(Integer.parseInt(msgArgs[3]), msgArgs[1], 
                     Integer.parseInt(msgArgs[2]));
@@ -147,9 +207,11 @@ public class CollectEntity {
                     break;
             }
             
+            // Update the gui text area with the message which was sent.
             gui.updateTextArea(message);
         }
         
+        // Close all the 3 producers.
         heartbeatProducer.close();
         speedProducer.close();
         statusProducer.close();

@@ -8,19 +8,19 @@ public class AlarmGUI extends javax.swing.JFrame {
     }
     
     public void updateTextArea(String text) {
-        jTextArea3.append(text);
+        jTextArea3.append(text + "\n");
         jTextArea3.setCaretPosition(jTextArea3.getText().length());
     }
     
     public void changeAlarm(boolean change, String text){
         if(change){
             jLabel1.setText("On");
-            jTextArea4.append(text);
+            jTextArea4.append(text + "\n");
             jTextArea4.setCaretPosition(jTextArea4.getText().length());  
         }
         else{
             jLabel1.setText("Off");
-            jTextArea4.append(text);
+            jTextArea4.append(text + "\n");
             jTextArea4.setCaretPosition(jTextArea4.getText().length());
         }
     }
@@ -96,6 +96,7 @@ public class AlarmGUI extends javax.swing.JFrame {
         setTitle("Control Center");
         setResizable(false);
 
+        jLabel3.setFont(new java.awt.Font("Noto Sans", 1, 18)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Alarm Entity GUI");
 

@@ -7,7 +7,7 @@ public class ReportGUI extends javax.swing.JFrame {
     }
     
     public void updateTextArea(String text) {
-        jTextArea1.append(text);
+        jTextArea1.append(text + "\n");
         jTextArea1.setCaretPosition(jTextArea1.getText().length());
     }
 
@@ -71,6 +71,7 @@ public class ReportGUI extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
+        jLabel1.setFont(new java.awt.Font("Noto Sans", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Report Entity GUI");
 

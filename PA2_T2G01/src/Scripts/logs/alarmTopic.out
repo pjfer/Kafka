@@ -1,0 +1,9 @@
+Error while executing topic command : Topic AlarmTopic already exists
+[2020-04-18 17:47:38,867] ERROR java.lang.IllegalArgumentException: Topic AlarmTopic already exists
+	at kafka.admin.TopicCommand$AdminClientTopicService.createTopic(TopicCommand.scala:244)
+	at kafka.admin.TopicCommand$TopicService.createTopic(TopicCommand.scala:194)
+	at kafka.admin.TopicCommand$TopicService.createTopic$(TopicCommand.scala:189)
+	at kafka.admin.TopicCommand$AdminClientTopicService.createTopic(TopicCommand.scala:217)
+	at kafka.admin.TopicCommand$.main(TopicCommand.scala:61)
+	at kafka.admin.TopicCommand.main(TopicCommand.scala)
+ (kafka.admin.TopicCommand$)

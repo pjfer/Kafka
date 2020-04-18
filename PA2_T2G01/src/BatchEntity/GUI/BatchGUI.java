@@ -7,7 +7,7 @@ public class BatchGUI extends javax.swing.JFrame {
     }
     
     public void updateTextArea(String text) {
-        jTextArea3.append(text);
+        jTextArea3.append(text + "\n");
         jTextArea3.setCaretPosition(jTextArea3.getText().length());
     }
     
@@ -66,6 +66,7 @@ public class BatchGUI extends javax.swing.JFrame {
         setTitle("Control Center");
         setResizable(false);
 
+        jLabel3.setFont(new java.awt.Font("Noto Sans", 1, 18)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Batch Entity GUI");
 
