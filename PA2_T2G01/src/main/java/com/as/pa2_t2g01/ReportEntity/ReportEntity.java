@@ -1,17 +1,12 @@
 package main.java.com.as.pa2_t2g01.ReportEntity;
 
 import java.io.FileWriter;
-import java.io.IOException;
-import java.time.Duration;
+import java.io.IOException;;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Properties;
 import main.java.com.as.pa2_t2g01.Data.Message;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.consumer.OffsetAndMetadata;
-import org.apache.kafka.common.TopicPartition;
+
 
 /**
  *
@@ -23,7 +18,7 @@ public class ReportEntity {
     private static final String enable_commit = "false";
     private static final String max_records = "50";
     private static final String report_topic = "ReportTopic";
-    
+    private static final int n_consumers = 3;
     
     public static void main(String[] args) throws IOException {
         
@@ -36,14 +31,20 @@ public class ReportEntity {
         props.put("value.deserializer", "main.java.com.as.pa2_t2g01.Data.MessageDeserializer");
         props.put("group.id", "0");
         
-        KafkaConsumer<String, Message> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Arrays.asList(report_topic));
-        
         ReportGUI gui = new ReportGUI();
         gui.startGUI(gui);
         
         FileWriter reportFile = new FileWriter("REPORT.TXT");
         
+        SharedRegion sr = new SharedRegion(reportFile, gui);
+        
+        for(int i = 0; i < n_consumers; i++){
+            KafkaConsumer<String, Message> consumer = new KafkaConsumer<>(props);
+            consumer.subscribe(Arrays.asList(report_topic));
+            Consumer c = new Consumer(consumer, sr);
+            c.start();
+        }
+        /*
         while (true) {
             ConsumerRecords<String, Message> records = consumer.poll(Duration.ofMillis(100));
             
@@ -62,6 +63,6 @@ public class ReportEntity {
             }
             
             consumer.commitSync();
-        }
+        }*/
     }
 }

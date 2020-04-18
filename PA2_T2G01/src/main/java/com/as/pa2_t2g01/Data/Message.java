@@ -60,16 +60,18 @@ public class Message {
     @Override
     public String toString() {
         if(message_type == 0){
-            return  "| " + car_reg + " | " + timestamp + " | 00 |\n HeartBit"; 
+            return  "| " + car_reg + " | " + timestamp + " | 00 | HeartBit"; 
         }
         if(message_type == 1){
-            return  "| " + car_reg + " | " + timestamp + " | 00 |\n"+speed;
+            return  "| " + car_reg + " | " + timestamp + " | 01 | " + speed;
         }
         if(message_type == 2){
             String status = (car_status == 0) ? "OK" : "KO";
-            return  "| " + car_reg + " | " + timestamp + " | 00 |\n" + status;
+            return  "| " + car_reg + " | " + timestamp + " | 02 | " + status;
         }
         
-        return "Message{" + "message_type=" + message_type + ", car_reg=" + car_reg + ", timestamp=" + timestamp + ", speed=" + speed + ", car_status=" + car_status + '}';
+        return "Message{" + "message_type=" + message_type + ", car_reg=" 
+                + car_reg + ", timestamp=" + timestamp + ", speed=" + speed 
+                + ", car_status=" + car_status + '}';
     }    
 }
