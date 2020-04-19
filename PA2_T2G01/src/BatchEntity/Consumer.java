@@ -7,63 +7,65 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 /**
- * Class responsible for processing the records to messages and write them
- * on the batch gui and the BATCH.txt file.
+ * Thread que corre um consumidor kafka.
+ * 
+ * @author Rafael Teixeira e Pedro Ferreira.
  */
 public class Consumer extends Thread{
+    
     /**
-     * Kafka consumer to retrieve the records and commit offsets.
+     * Consumidor Kafka usado para obter as mensagens.
      */
     private final KafkaConsumer<String, Message> consumer;
     
     /**
-     * Region to control/synchronize the access of the file and gui between the
-     * threads.
+     * Região partilhada que controla o acesso à interface gráfica e ao ficheiro.
      */
     private final SharedRegion sr;
     
     /**
-     * Listener to trigger custom actions when the set of partitions assigned 
-     * to the consumer changes.
+     * Entidade responsável por fazer commits sincronos em caso de 
+     * rebalanceamento de partições e também de guardar os offsets para commit.
      */
     private RebalanceListener rl;
     
     /**
-     * Constructor to instantiate the kafka consumer, shared region and 
-     * rebalance listener.
-     * 
-     * @param consumer kafka consumer to retrieve the records and commit offsets.
-     * @param sr region to control/synchronize the access of the file and gui 
-     * between the threads.
-     * @param rl Listener to trigger custom actions when the set of partitions 
-     * assigned to the consumer changes.
+     * Construtor base de um consumidor
+     * @param consumer Consumidor Kafka usado para obter as mensagens.
+     * @param sr Região partilhada que controla o acesso à interface gráfica e ao ficheiro.
+     * @param rl Rebalance Listener usado pelo consumidor passado por argumento.
      */
-    public Consumer(KafkaConsumer<String, Message> consumer, SharedRegion sr, 
-            RebalanceListener rl)
-    {
+    public Consumer(KafkaConsumer<String, Message> consumer, SharedRegion sr, RebalanceListener rl){
         this.consumer = consumer;
         this.sr = sr;
         this.rl = rl;
     }
     
     @Override
+    /**
+     * Ciclo de vida o consumidor, obtém mensagens, processa e volta a pedir.
+     */
     public void run(){
         while (true) {
+            /* Obtém as mensagens. */
             ConsumerRecords<String, Message> records = 
                     consumer.poll(Duration.ofMillis(100));
-
+            
+            /* Processa todas as mensagens. */
             for (ConsumerRecord<String, Message> record : records){
                 Message m = record.value();
-
+                /* Verifica se a mensagem é do tipo speed. */
                 if(m.getMessageType()== 1){
-                    rl.addOffset(record.topic(), record.partition(), 
-                            record.offset());
+                    /* Adiciona o offset da mensagem speed ao listener */
+                    rl.addOffset(record.topic(), record.partition(), record.offset());
                 }
-
+                /* Escreve as mensagens que processa no ficheiro e GUI. */
                 sr.writeFile(m.toString());
                 sr.writeScreen(m.toString());
             }
+            /* Após processar todas as mensagens recebidas faz o commit. */
             consumer.commitSync(rl.getOffsets());
+            /* Limpa os offsets submetidos. */
             rl.clearOffsets();
         }
     }

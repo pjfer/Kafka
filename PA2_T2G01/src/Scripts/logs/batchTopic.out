@@ -1,9 +1,0 @@
-Error while executing topic command : Topic BatchTopic already exists
-[2020-04-18 17:47:31,320] ERROR java.lang.IllegalArgumentException: Topic BatchTopic already exists
-	at kafka.admin.TopicCommand$AdminClientTopicService.createTopic(TopicCommand.scala:244)
-	at kafka.admin.TopicCommand$TopicService.createTopic(TopicCommand.scala:194)
-	at kafka.admin.TopicCommand$TopicService.createTopic$(TopicCommand.scala:189)
-	at kafka.admin.TopicCommand$AdminClientTopicService.createTopic(TopicCommand.scala:217)
-	at kafka.admin.TopicCommand$.main(TopicCommand.scala:61)
-	at kafka.admin.TopicCommand.main(TopicCommand.scala)
- (kafka.admin.TopicCommand$)

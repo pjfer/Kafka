@@ -7,11 +7,22 @@ public class AlarmGUI extends javax.swing.JFrame {
         initComponents();
     }
     
+    /**
+     * Atualizar o campo de mensagens adicionando uma nova mensagem.
+     * 
+     * @param text Mensagem a ser apresentada no texto.
+     */
     public void updateTextArea(String text) {
         jTextArea3.append(text + "\n");
         jTextArea3.setCaretPosition(jTextArea3.getText().length());
     }
     
+    /**
+     * Atualizar o estado do alarme.
+     * 
+     * @param change Representa o estado do alarme.
+     * @param text Escreve o alarme na GUI.
+     */
     public void changeAlarm(boolean change, String text){
         if(change){
             jLabel1.setText("On");

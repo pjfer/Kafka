@@ -9,37 +9,38 @@ import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 
 /**
- * Class to trigger custom actions when the set of partitions assigned 
- * to the consumer changes.
+ * Entidade responsável por guardar os offset a serem submetidos e em caso de
+ * rebalanceamento submetê-los.
+ * 
+ * @author Rafael Teixeira e Pedro Ferreira
  */
 public class RebalanceListener implements ConsumerRebalanceListener{
+    
     /**
-     * Kafka consumer to commit synchronously the offsets.
+     * Consumidor kafka ao qual os offsets pertencem.
      */
     private final KafkaConsumer consumer;
     
     /**
-     * Map of offsets by partition with associated metadata.
+     * Offsets a serem submetidos
      */
-    private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = 
-            new HashMap<>();
+    private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
     
     /**
-     * COnstructor to instantiate the kafka consumer.
+     * Construtor base
      * 
-     * @param consumer 
+     * @param consumer Consumidor a quem o RebalanceListener pertence.
      */
     public RebalanceListener(KafkaConsumer consumer){
         this.consumer = consumer;
     }
     
     /**
-     * Method to add a new offset and associated metadata from a topic and 
-     * partition to the currentOffsets map.
+     * Adicionar um offset aos offsets a serem submetidos.
      * 
-     * @param topic kafka topic name.
-     * @param partition kafka partition number.
-     * @param offset offset to be committed.
+     * @param topic Tópico ao qual o offset pertence.
+     * @param partition Partição ao qual o offset pertence.
+     * @param offset  Offset a ser submetido.
      */
     public void addOffset(String topic, int partition, long offset){
         currentOffsets.put(new TopicPartition(topic, partition), 
@@ -67,6 +68,9 @@ public class RebalanceListener implements ConsumerRebalanceListener{
      * now need to be revoked.
      */
     @Override
+    /**
+     * Método executado em caso de rebalanceamento de partições.
+     */
     public void onPartitionsRevoked(Collection<TopicPartition> clctn) {
         consumer.commitSync(currentOffsets);
         currentOffsets.clear();

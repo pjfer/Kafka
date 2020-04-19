@@ -5,25 +5,27 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Class responsible for controlling/synchronizing the access to the file and 
- * gui between the consumer threads.
+ * Classe que controla o acesso concorrente ao ficheiro e à interface gráfica.
+ * 
+ * @author Rafael Teixeira e Pedro Ferreira
  */
 public class SharedRegion {
+    
     /**
-     * File to write the received messages to (BATCH.txt).
+     * Ficheiro onde escrevemos os alarmes.
      */
     private final FileWriter batchFile;
     
     /**
-     * GUI to display the received messages.
+     * GUI onde escrevemos as mensagens e os alarmes.
      */
     private final BatchGUI gui;
     
     /**
-     * Constructor to instantiate the text file and gui.
+     * Construtor base.
      * 
-     * @param batchFile file to write the received messages to (BATCH.txt).
-     * @param gui GUI to display the received messages.
+     * @param batchFile Ficheiro onde escrevemos os alarmes.
+     * @param gui GUI onde escrevemos as mensagens e os alarmes.
      */
     public SharedRegion(FileWriter batchFile, BatchGUI gui){
         this.batchFile = batchFile;
@@ -31,9 +33,8 @@ public class SharedRegion {
     }
     
     /**
-     * Method to write the received message in the text file.
-     * 
-     * @param text received message in the string format.
+     * Escreve a mensagem no ficheiro.
+     * @param text mansagem a ser escrita no ficheiro.
      */
     public synchronized void writeFile(String text){
         try {
@@ -43,9 +44,9 @@ public class SharedRegion {
     }
     
     /**
-     * Method to write the received message in the text area of the gui.
+     * Escreve a mensagem na GUI.
      * 
-     * @param text received message in the string format.
+     * @param text Mensagem a ser escrita no GUI.
      */
     public synchronized void writeScreen(String text){
         gui.updateTextArea(text);
