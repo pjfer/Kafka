@@ -1,5 +1,8 @@
 package ReportEntity;
 
+import KafkaEntities.SharedRegion;
+import KafkaEntities.RebalanceListener;
+import KafkaEntities.Consumer;
 import java.io.FileWriter;
 import java.io.IOException;;
 import java.util.Arrays;
@@ -10,46 +13,46 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 
 /**
- * Entidade que representa a Report, gera três consumidores kafka com
- * group.id 0 que subrescrevem o tópico ReportTopic.
+ * Entity that represents the report, it generates three kafka consumers
+ * with group.id 0 that subscribe the topic ReportTopic
  * 
- * @author Rafael Teixeira e Pedro Ferreira
+ * @author Rafael Teixeira & Pedro Ferreira
  */
 public class ReportEntity {
     
     /**
-     * Endereço do broker kafka.
+     * Kafka broker address.
      */
     private static final String kafka_server = "localhost:9092";
     
     /**
-     * Proíbe a criação automática de tópicos.
+     * Disables the automatic creation of topics.
      */
     private static final String create_topics = "false";
     
     /**
-     * Proíbe os commits automáticos
+     * Disables de automatic commits.
      */
     private static final String enable_commit = "false";
     
     /**
-     * Número máximo de registos puxados de cada vez.
+     * Number of messages polled each time.
      */
     private static final String max_records = "50";
     
     /**
-     * Tópico a ser subscrito.
+     * Subscribed topic.
      */
     private static final String report_topic = "ReportTopic";
     
     /**
-     * Número de consumidores lançados.
+     * Number of consumers launched.
      */
     private static final int n_consumers = 3;
     
     public static void main(String[] args) throws IOException {
         
-        /* Gera as propriedades definidas anteriormente. */
+        /* Applies the previously defined propreties.  */
         Properties props = new Properties();
         props.put("bootstrap.servers", kafka_server);
         props.put("allow.auto.create.topics", create_topics);
@@ -60,21 +63,21 @@ public class ReportEntity {
         props.put("value.deserializer", "Data.MessageDeserializer");
         props.put("group.id", "0");
         
-        /* Cria a interface gráfica que apresenta as mensagens recebidas. */
+        /* Generates the graphical interface that presents the received messages.*/
         ReportGUI gui = new ReportGUI();
         gui.startGUI(gui);
         
-        /* Cria um ficheiro que guarda as mensagens recebidas. */
+        /* Creates the file that stores the received messages. */
         FileWriter reportFile = new FileWriter(System.getProperty("user.dir")
                 .concat("/src/Data/REPORT.txt"));
         
         /* 
-            Cria a região que trata do acesso concorrente 
-            das threads à interface gráfica e ao ficheiro. 
+            Creates the region that handles the concurrent
+            access to the GUUI and file.  
         */
         SharedRegion sr = new SharedRegion(reportFile, gui);
         
-        /* Cria os consumidores e lança as threads. */
+        /* Creates the consumers and lauches threads. */
         for(int i = 0; i < n_consumers; i++){
             KafkaConsumer<String, Message> consumer = new KafkaConsumer<>(props);
             RebalanceListener rl = new RebalanceListener(consumer);

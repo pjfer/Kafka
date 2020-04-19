@@ -1,4 +1,4 @@
-package ReportEntity;
+package KafkaEntities;
 
 import java.time.Duration;
 import Data.Message;
@@ -7,33 +7,33 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 /**
- * Thread que corre um consumidor kafka.
+ * Thread that runs the kafka consumer.
  * 
- * @author Rafael Teixeira e Pedro Ferreira.
+ * @author Rafael Teixeira & Pedro Ferreira.
  */
 public class Consumer extends Thread{
     
     /**
-     * Consumidor Kafka usado para obter as mensagens.
+     * Kafka consumer used to obtain the messages.
      */
     private final KafkaConsumer<String, Message> consumer;
     
     /**
-     * Região partilhada que controla o acesso à interface gráfica e ao ficheiro.
+     * Shared region that handles the access to the gui and the file.
      */
     private final SharedRegion sr;
     
     /**
-     * Entidade responsável por fazer commits sincronos em caso de 
-     * rebalanceamento de partições e também de guardar os offsets para commit.
+     * Entity to handle the offsets and commits in case of rebalansing.
      */
     private final RebalanceListener rl;
     
     /**
-     * Construtor base de um consumidor
-     * @param consumer Consumidor Kafka usado para obter as mensagens.
-     * @param sr Região partilhada que controla o acesso à interface gráfica e ao ficheiro.
-     * @param rl Rebalance Listener usado pelo consumidor passado por argumento.
+     * Base Constructor of a consumer.
+     * 
+     * @param consumer Kafka consumer used to obtain the messages.
+     * @param sr Shared region that handles the access to the gui and the file.
+     * @param rl Entity to handle the offsets and commits in case of rebalansing.
      */
     public Consumer(KafkaConsumer<String, Message> consumer, SharedRegion sr,
             RebalanceListener rl){
@@ -43,33 +43,33 @@ public class Consumer extends Thread{
         this.rl = rl;
     }
     
-    @Override
     /**
-     * Ciclo de vida o consumidor, obtém mensagens, processa e volta a pedir.
+     * Thread life cycle.
      */
+    @Override
     public void run(){
         
         while (true) {
-            /* Obtém as mensagens. */
+            /* Obtains Messages. */
             ConsumerRecords<String, Message> records = 
                     consumer.poll(Duration.ofMillis(100));
             
-            /* Processa todas as mensagens. */
+            /* Processes the messages. */
             for (ConsumerRecord<String, Message> record : records){
                 Message m = record.value();
                 
-                /* Verifica se a mensagem é do tipo speed. */
+                /* Checks if message of type speed. */
                 if(m.getMessageType()== 1){
-                    /* Adiciona o offset da mensagem speed ao listener */
+                    /* Adds the offset of the speed message. */
                     rl.addOffset(record.topic(), record.partition(), record.offset());
                 }
-                /* Escreve as mensagens que processa no ficheiro e GUI. */
+                /* Writes every message on the GUI and in the file section. */
                 sr.writeFile(m.toString());
                 sr.writeScreen(m.toString());
             }
-            /* Após processar todas as mensagens recebidas faz o commit. */
+            /* After processing a batch, commits the offsets. */
             consumer.commitSync(rl.getOffsets());
-            /* Limpa os offsets submetidos. */
+            /* Cleans the pushed offsets. */
             rl.clearOffsets();
         }
     }

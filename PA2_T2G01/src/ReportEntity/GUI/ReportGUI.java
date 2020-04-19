@@ -1,16 +1,31 @@
 package ReportEntity.GUI;
 
+/**
+ * Class for the graphical user interface of the Report entity.
+ */
 public class ReportGUI extends javax.swing.JFrame {
 
+    /**
+     * Creates new form ReportGUI.
+     */
     public ReportGUI() {
         initComponents();
     }
-    
+    /**
+     * Update the text area with the sent messages.
+     * 
+     * @param text sent message in the string format.
+     */
     public void updateTextArea(String text) {
         jTextArea1.append(text + "\n");
         jTextArea1.setCaretPosition(jTextArea1.getText().length());
     }
-
+    /**
+     * Instantiation and initialization of all elements present in the batch
+     * entity GUI.
+     * 
+     * @param ccGUI graphical user interface of the collect entity.
+     */
     public void startGUI(ReportGUI ccGUI) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
