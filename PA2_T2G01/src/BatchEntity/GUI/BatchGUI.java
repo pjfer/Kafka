@@ -6,6 +6,11 @@ public class BatchGUI extends javax.swing.JFrame {
         initComponents();
     }
     
+    /**
+     * Atualizar o campo de mensagens adicionando uma nova mensagem.
+     * 
+     * @param text Mensagem a ser apresentada no texto.
+     */
     public void updateTextArea(String text) {
         jTextArea3.append(text + "\n");
         jTextArea3.setCaretPosition(jTextArea3.getText().length());
