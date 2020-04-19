@@ -37,7 +37,7 @@ public class CollectEntityGUI extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CollectEntity");
+        setTitle("Control Center");
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Noto Sans", 1, 18)); // NOI18N
