@@ -197,11 +197,14 @@ public class CollectEntity {
                 case "02":
                     msg.setCarStatus("OK".equals(msgArgs[4]) ? 0 : 1);
                     statusProducer
-                            .send(new ProducerRecord<>(BATCH_TOPIC, msg));
+                            .send(new ProducerRecord<>(BATCH_TOPIC, "STATUS", 
+                                    msg));
                     statusProducer
-                            .send(new ProducerRecord<>(REPORT_TOPIC, msg));
+                            .send(new ProducerRecord<>(REPORT_TOPIC, "STATUS", 
+                                    msg));
                     statusProducer
-                            .send(new ProducerRecord<>(ALARM_TOPIC, msg));
+                            .send(new ProducerRecord<>(ALARM_TOPIC, "STATUS", 
+                                    msg));
                     break;
                 default:
                     heartbeatProducer
