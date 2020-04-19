@@ -1,13 +1,10 @@
 package AlarmEntity;
 
 import java.time.Duration;
-import java.util.Collections;
 import Data.Message;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.consumer.OffsetAndMetadata;
-import org.apache.kafka.common.TopicPartition;
 
 
 public class Consumer extends Thread{
@@ -26,7 +23,6 @@ public class Consumer extends Thread{
     
     @Override
     public void run(){
-        boolean alarm = false;
         while (true) {
             ConsumerRecords<String, Message> records =
                     consumer.poll(Duration.ofMillis(100));
@@ -35,15 +31,15 @@ public class Consumer extends Thread{
                 Message m = record.value();
                 
                 if(m.getMessageType()== 1){
-                    if(!alarm && m.getSpeed() > 120){
-                        alarm = true;
-                        sr.writeFile(m.toString() + " | ON |");
-                        sr.updateAlarm(alarm, m.toString() + " | ON |");
+                    if(!sr.isAlarm() && m.getSpeed() > 120){
+                        sr.setAlarm(true);
+                        sr.writeFile(m.toString() + " ON |");
+                        sr.updateAlarm(sr.isAlarm(), m.toString() + " ON |");
                     }
-                    if(alarm && m.getSpeed() < 120){
-                        alarm = false;
-                        sr.updateAlarm(alarm, m.toString() + " | OFF |");
-                        sr.writeFile(m.toString() + " | OFF |");
+                    if(sr.isAlarm() && m.getSpeed() < 120){
+                        sr.setAlarm(false);
+                        sr.updateAlarm(sr.isAlarm(), m.toString() + " OFF |");
+                        sr.writeFile(m.toString() + " OFF |");
                     }
                     rl.addOffset(record.topic(), record.partition(), record.offset());
                 }

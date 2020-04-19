@@ -93,7 +93,7 @@ public class AlarmGUI extends javax.swing.JFrame {
         jTextArea4 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Control Center");
+        setTitle("Alarm Entity");
         setResizable(false);
 
         jLabel3.setFont(new java.awt.Font("Noto Sans", 1, 18)); // NOI18N

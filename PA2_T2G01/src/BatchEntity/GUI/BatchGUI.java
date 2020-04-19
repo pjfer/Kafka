@@ -63,7 +63,7 @@ public class BatchGUI extends javax.swing.JFrame {
         jTextArea3 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Control Center");
+        setTitle("Batch Entity");
         setResizable(false);
 
         jLabel3.setFont(new java.awt.Font("Noto Sans", 1, 18)); // NOI18N
