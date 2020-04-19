@@ -7,8 +7,7 @@ import java.util.logging.Logger;
 import org.apache.kafka.common.serialization.Deserializer;
 
 /**
- *
- * 
+ * Class to deserialize the messages to be received from a topic by a consumer.
  */
 public class MessageDeserializer implements Deserializer<Message>{
 
@@ -26,16 +25,19 @@ public class MessageDeserializer implements Deserializer<Message>{
                 byte[] reg = new byte[reg_size];
                 buf.get(reg);
                 m.setCarReg(new String(reg, encoding));
-                
                 m.setTimestamp(buf.getInt());
+                
+                // If the message type is SPEED.
                 if(m.getMessageType() == 1){
                      m.setSpeed(buf.getInt());
                 }
-                if(m.getMessageType() == 2){
+                // If the message type is STATUS.
+                else if(m.getMessageType() == 2){
                     m.setCarStatus(buf.getInt());
                 }
             } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(MessageDeserializer.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MessageDeserializer.class.getName())
+                        .log(Level.SEVERE, null, ex);
             }
         
         }

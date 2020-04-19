@@ -33,7 +33,6 @@ public class RebalanceListener implements ConsumerRebalanceListener{
      */
     public RebalanceListener(KafkaConsumer consumer){
         this.consumer = consumer;
-        
     }
     
     /**
@@ -52,10 +51,22 @@ public class RebalanceListener implements ConsumerRebalanceListener{
         return currentOffsets;
     }
     
+    /**
+     * Method to remove all the offsets to be committed.
+     */
     public void clearOffsets(){
         currentOffsets.clear();
     }
     
+    /**
+     * Callback method to provide handling of offset commits to a customized 
+     * store. 
+     * This method will be called during a rebalance operation when the 
+     * consumer has to give up some partitions.
+     * 
+     * @param clctn list of partitions that were assigned to the consumer and 
+     * now need to be revoked.
+     */
     @Override
     /**
      * Método executado em caso de rebalanceamento de partições.
@@ -65,8 +76,15 @@ public class RebalanceListener implements ConsumerRebalanceListener{
         currentOffsets.clear();
     }
 
+    /**
+     * Callback method to provide handling of customized offsets on completion 
+     * of a successful partition re-assignment. 
+     * This method will be called after the partition re-assignment completes 
+     * and before the consumer starts fetching data.
+     * 
+     * @param clctn list of partitions that are now assigned to the consumer.
+     */
     @Override
     public void onPartitionsAssigned(Collection<TopicPartition> clctn) {
     }
-    
 }
