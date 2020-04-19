@@ -63,7 +63,7 @@ public class ReportGUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Control Center");
+        setTitle("Report Entity");
         setResizable(false);
 
         jTextArea1.setEditable(false);
