@@ -23,12 +23,24 @@ Inside of the folder PA2_P2G01/src/Scripts, there's 3 scripts responsible for th
 - messages_gen: Generates a file, inside the Data folder, with messages of type status, speed and heartbeat. The number of generated messages of each type is inserted by the user.
 - kafka: Deploys zookeeper and kafka, and creates the necessary topics.
 
-After opening our project (PA2_P2G01) in the IDE, firstly, the AlarmEntity.java, BatchEntity.java and ReportEntity.java should be run, and afterwards, the CollectEntity.java.
+To start zookeeper and kafka, inside the Scripts folder, simply run on the command line:
+
+`./kafka -s`
+
+And, after the start command is complete, run this command to create the necessary topics:
+
+`./kafka -c`
+
+To shutdown the zookeeper and kafka, run:
+
+`./kafka -d`
+
+After starting the zookeeper and kafka, creating the topics and opening our project (PA2_P2G01) in the IDE, firstly, the AlarmEntity.java, BatchEntity.java and ReportEntity.java should be run, and afterwards, the CollectEntity.java.
 
 ## Built With
 
 * Java
-* Shell
+* Bash
 
 ## Authors
 
