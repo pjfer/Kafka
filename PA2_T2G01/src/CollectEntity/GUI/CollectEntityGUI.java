@@ -6,7 +6,7 @@ package CollectEntity.GUI;
 public class CollectEntityGUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form CollectEntityGUI
+     * Creates new form CollectEntityGUI.
      */
     public CollectEntityGUI() {
         initComponents();

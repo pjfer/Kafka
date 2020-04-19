@@ -1,16 +1,33 @@
 package BatchEntity.GUI;
 
+/**
+ * Class for the graphical user interface of the collect entity.
+ */
 public class BatchGUI extends javax.swing.JFrame {
 
+    /**
+     * Creates new form BatchGUI.
+     */
     public BatchGUI() {
         initComponents();
     }
     
+    /**
+     * Update the text area with the received messages.
+     * 
+     * @param text received message in the string format.
+     */
     public void updateTextArea(String text) {
         jTextArea3.append(text + "\n");
         jTextArea3.setCaretPosition(jTextArea3.getText().length());
     }
     
+    /**
+     * Instantiation and initialization of all elements present in the batch
+     * entity GUI.
+     * 
+     * @param ccGUI graphical user interface of the collect entity.
+     */
     public void startGUI(BatchGUI ccGUI) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
